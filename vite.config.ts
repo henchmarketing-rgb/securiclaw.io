@@ -24,10 +24,12 @@ export default defineConfig(({ mode }) => ({
     },
   },
   define: {
+    "process.env.NODE_ENV": JSON.stringify("production"),
     "process.env": JSON.stringify({}),
-    "process.platform": JSON.stringify(""),
-    "process.stdout": "undefined",
-    "process.stderr": "undefined",
-    "process": JSON.stringify({ env: {}, platform: "", stdout: null, stderr: null }),
+    "process.platform": JSON.stringify("browser"),
+    "process.stdout": "null",
+    "process.stderr": "null",
+    "process.version": JSON.stringify(""),
+    "process.browser": "true",
   },
 }));
