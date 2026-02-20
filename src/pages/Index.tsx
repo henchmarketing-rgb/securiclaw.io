@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
-import { runAudit, runAuditWithAI, AuditResult, SecurityIssue } from '@/lib/security/audit';
+import type { AuditResult, SecurityIssue } from '@/lib/security/audit';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -106,6 +106,8 @@ const Index = () => {
     setTimeout(async () => {
       try {
         // Run deterministic or AI-enhanced scan
+        // Dynamically import scanner — defers 800KB babel-vendor until first scan
+        const { runAudit, runAuditWithAI } = await import('@/lib/security/audit');
         const auditResult = enableAI ? await runAuditWithAI(code) : runAudit(code);
         setResult(auditResult);
         setScanLayers(layers => layers.map(l => ({ ...l, status: 'complete' })));
