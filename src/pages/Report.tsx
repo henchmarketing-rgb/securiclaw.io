@@ -40,10 +40,15 @@ const Report = () => {
         if (!response.ok) {
           throw new Error(response.status === 404 ? 'Scan not found' : 'Failed to load scan');
         }
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          throw new Error('Scan sharing requires the backend server. Run locally with the backend to enable this feature.');
+        }
         const data = await response.json();
         setScanData(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load scan');
+        const msg = err instanceof Error ? err.message : 'Failed to load scan';
+        setError(msg.includes('JSON') ? 'Scan sharing requires the backend server. Run locally with the backend to enable this feature.' : msg);
       } finally {
         setLoading(false);
       }
