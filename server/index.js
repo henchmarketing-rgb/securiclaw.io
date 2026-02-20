@@ -34,7 +34,14 @@ db.exec(`
 `);
 
 // Middleware
-app.use(cors());
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? [
+      process.env.FRONTEND_URL || 'https://securiclaw-orpin.vercel.app',
+      /\.vercel\.app$/,
+    ]
+  : true; // Allow all in dev
+
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json({ limit: '5mb' }));
 
 // Rate limiting - 10 scans per IP per 10 minutes
